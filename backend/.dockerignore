@@ -1,0 +1,9 @@
+node_modules
+.git
+.env
+.env.local
+*.md
+VERIFIED_FILES.txt
+SETUP_SUMMARY.txt
+WHERE_IS_EVERYTHING.txt
+FRONTEND_IMPLEMENTATION_SUMMARY.txt

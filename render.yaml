@@ -1,0 +1,14 @@
+{
+  "name": "finbank-api",
+  "version": "2.0.0",
+  "description": "FinBank - Premium Banking Platform API",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "buildpacks": [
+    {
+      "buildCommand": "npm install",
+      "runCommand": "node server.js"
+    }
+  ]
+}
