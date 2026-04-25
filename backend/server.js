@@ -10,9 +10,14 @@ import { generalLimiter, authLimiter, otpLimiter, apiLimiter, transactionLimiter
 
 dotenv.config();
 const app = express();
- 
-// Connect to MongoDB
-connectDB();
+
+const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET'];
+const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
+
+if (missingEnvVars.length > 0) {
+  console.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+  process.exit(1);
+}
 
 // Security Middleware - Apply first for maximum protection
 app.use(checkIPBlacklist);
@@ -61,14 +66,25 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });
 });
 
-// Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`
+
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`
 ╔════════════════════════════════════════╗
 ║   Bank Management System - Backend      ║
 ║   Server running on port ${PORT}         ║
 ║   Security Middleware: ACTIVE           ║
 ╚════════════════════════════════════════╝
   `);
-});
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
